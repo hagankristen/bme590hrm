@@ -10,7 +10,6 @@ def main():
     except ImportError as e:
         print('ImportError: %s module not found.' % e.name)
         lg.debug(' | ABORTED: ImportError: %s' % e.name)
-        raise ImportError
 
     cwd = os.getcwd()
     csv_path = os.path.join(cwd, 'test_data/test_data1.csv')
@@ -18,16 +17,17 @@ def main():
     try:
         patient = GetCsvData(csv_path)
         print('Success: ECG Data extracted from csv.')
-    except ValueError:
-        print('Empty csv file.')
     except TypeError:
         print('Input file not csv format or does not exist.')
     except ImportError:
         print('Import Error: module not found.')
+    except IOError:
+        print('Empty input file.')
 
     try:
         patient_heart_info = PatientHeartInfo(patient)
-        print(patient_heart_info.calc_duration())
+        print(patient_heart_info.calc_num_beats())
+        print(patient_heart_info.calc_bpm())
     except:
         print('not done')
     #import function files
