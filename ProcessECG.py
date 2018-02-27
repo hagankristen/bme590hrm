@@ -12,7 +12,7 @@ def main():
         lg.debug(' | ABORTED: ImportError: %s' % e.name)
 
     cwd = os.getcwd()
-    csv_path = os.path.join(cwd, 'test_data/test_data9.csv')
+    csv_path = os.path.join(cwd, 'test_data/test_data27.csv')
 
     try:
         patient = GetData(csv_path)
@@ -47,6 +47,23 @@ def CheckData(patient):
     else:
         print('Imported data does not require interpolation.')
     return flag
+
+
+def InterpolateData(patient):
+    import numpy as np
+    ecg = patient.data
+    voltz = ecg[:, 1]
+    time = ecg[:, 0]
+    if np.isnan(time).any():
+        nans, x = np.isnan(time), lambda z: z.nonzero()[0]
+        time[nans] = np.interp(x(nans), x(~nans), time[~nans])
+        ecg[:, 0] = time
+    if np.isnan(voltz).any():
+        nans, x = np.isnan(voltz), lambda z: z.nonzero()[0]
+        voltz[nans] = np.interp(x(nans), x(~nans), voltz[~nans])
+        ecg[:, 1] = voltz
+    patient.data = ecg
+    return patient
 
 
 if __name__ == "__main__":
