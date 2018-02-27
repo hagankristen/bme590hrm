@@ -30,14 +30,15 @@ def main():
         print(patient_heart_info.calc_bpm())
     except:
         print('not done')
-    #import function files
+    # import function files
 
-    #try
-    #define class of patientheartrateinfo that has attribues given
+    # try
+    # define class of patientheartrateinfo that has attribues given
 
-    #create data classes inside the patientheartinfo class
-    #except print out reason for error (dont raise again)
+    # create data classes inside the patientheartinfo class
+    # except print out reason for error (dont raise again)
     #
+
 
 if __name__ == "__main__":
     main()

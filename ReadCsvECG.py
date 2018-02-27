@@ -13,6 +13,7 @@ class GetCsvData:
         self.path_name = csv_file
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            self.data = np.genfromtxt(csv_file, delimiter=",", dtype=(float, float))
+            self.data = np.genfromtxt(
+                csv_file, delimiter=",", dtype=(float, float))
         if len(self.data) == 0:
             raise IOError
