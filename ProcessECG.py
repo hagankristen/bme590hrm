@@ -1,4 +1,13 @@
 def main():
+    """Main that runs all functions needed to process ECG data
+                        from specified input file
+
+    :raises ImportError: if any modules are not imported
+    :raises ValueError: input data outside of expected values
+    :raises IOError: if any modules are not imported
+    :raises ImportError: if input file is Empty
+    :raises TypeError: if input file nonexistent or not csv
+    """
     try:
         import numpy as np
         import os
@@ -11,6 +20,11 @@ def main():
     except ImportError as e:
         print('ImportError: %s module not found.' % e.name)
         lg.debug(' | ABORTED: ImportError: %s' % e.name)
+
+    lg.basicConfig(filename='PatientHeartRateMonitor.log',
+                   level=lg.DEBUG,
+                   format='%(asctime)s %(message)s',
+                   datefmt='%m/%d/%Y %I:%M:%S %p')
 
     cwd = os.getcwd()
     test_folder = 'test_data/test_data32.csv'
@@ -30,6 +44,7 @@ def main():
         print('Input file not csv format or does not exist.')
     except ImportError:
         print('Import Error: module not found.')
+        lg.debug(' | ABORTED: ImportError: %s' % e.name)
     except IOError:
         print('Empty input file.')
 
@@ -45,6 +60,13 @@ def main():
 
 
 def CheckVoltRange(patient):
+    """Checks voltage data to ensure values do not exceed 300 mV
+
+    :param patient: instance of GetData
+    :returns None: no return value
+    :raises ValueError: if any ECG voltage in data is greater or
+                        equal to 300 mV
+    """
     import numpy as np
     ecg = patient.data
     voltz = ecg[:, 1]
@@ -54,8 +76,13 @@ def CheckVoltRange(patient):
 
 
 def CheckMissingData(patient):
-    import numpy as np
+    """Checks ECG data for missing values
 
+    :param patient: instance of GetData
+    :returns flag: boolean flag to indicate interpolation need
+    """
+
+    import numpy as np
     flag = 0
     flag = np.isnan(patient.data).any()
     if flag:
@@ -66,6 +93,12 @@ def CheckMissingData(patient):
 
 
 def InterpolateData(patient):
+    """Interpolates time and voltage data if missing values exist
+
+    :param patient: instance of GetData
+    :returns patient: GetData instance of patient with
+                        interpolated ecg values
+    """
     import numpy as np
     ecg = patient.data
     voltz = ecg[:, 1]
@@ -83,6 +116,11 @@ def InterpolateData(patient):
 
 
 def WriteJson(hrm, folder_path):
+    """Write .json file containing attributes of ecg data
+
+    :param patient: instance of PatientInfo
+    :returns None: no return value
+    """
     import json
     import os
     name = os.path.basename(folder_path)

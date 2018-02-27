@@ -6,6 +6,12 @@ import logging as lg
 
 class PatientInfo:
     def __init__(self, patient):
+        """Returns PatientInfo class that contains path, ECG data,
+                            and attributes
+
+        :param patient: instance of GetData class
+        :returns self: instance of initialized PatientInfo
+        """
         self.name = patient.path_name
         self.ecg = patient.data
         self.voltage_extremes = self.calc_volt_ex()
@@ -21,8 +27,10 @@ class PatientInfo:
         auto = sig.correlate(voltz, voltz, mode='full', method='auto')
         auto_crop = auto[np.argmax(auto):-1]
         pks = sig.find_peaks_cwt(auto_crop, np.arange(1, 225))
-        np.savetxt("pk1.csv", pks, delimiter=",")
         self.num_beats = len(pks)
+        if len(pks) == 0:
+            print('No peaks in ECG detected')
+            raise ValueError
         return self.num_beats
 
     def calc_volt_ex(self):

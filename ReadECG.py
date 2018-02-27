@@ -1,5 +1,13 @@
 class GetData:
     def __init__(self, csv_file):
+        """Returns GetData class that contains path and ECG data
+                            from csv file
+
+        :param csv_file: path to input csv file
+        :returns self: instance of GetData
+        :raises TypeError: if csv file nonexistent or not .csv
+        :raises IOError: if input csv is empty
+        """
         import os
         import numpy as np
         import warnings
