@@ -23,10 +23,7 @@ class GetData:
 
         extension = os.path.splitext(csv_file)[1]
         cwd = os.getcwd()
-        print(cwd)
         flag = os.path.exists(csv_file)
-        print(csv_file)
-        print(flag)
         if extension != '.csv':
             raise TypeError
             print('TypeError: File not .csv format.')

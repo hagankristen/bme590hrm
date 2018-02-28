@@ -61,6 +61,12 @@ class PatientInfo:
         return self.mean_hr_bpm
 
     def calc_beat_times(self):
+        """Calculates times at which a beat occurs using autocorrelation
+
+        :param self: instance of PatientInfo
+        :returns None: no return value
+        :raises UnknownError: if autocorrelation fails 
+        """
         try:
             auto = sig.correlate(self.volt, self.volt,
                                  mode='full', method='auto')
