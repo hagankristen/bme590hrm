@@ -25,7 +25,7 @@ def test_calc_duration():
     assert(np.isclose(patient3.duration, 39.996))
 
 
-def test_calc_bpm(self):
+def test_calc_bpm():
     patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
     if patient1.mean_hr_bpm in range(73, 77):
         flag = True
