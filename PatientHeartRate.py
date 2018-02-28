@@ -32,10 +32,14 @@ class PatientInfo:
 
     def load_ecg(self):
         from ReadECG import GetData
-        data = GetData(self.path)
-        self.volt = data.volts
-        self.time = data.time
-        lg.info(' | SUCCESS: ECG Data loaded into PatientInfo class.')
+        try:
+            data = GetData(self.path)
+            self.volt = data.volts
+            self.time = data.time
+            lg.info(' | SUCCESS: ECG Data loaded into PatientInfo class.')
+        except:
+            lg.debug(' | ABORTED: Error within GetData.')
+            print('Error within GetData.')
         return
 
     def calc_num_beats(self):
