@@ -40,6 +40,7 @@ class PatientInfo:
         except:
             lg.debug(' | ABORTED: Error within GetData.')
             print('Error within GetData.')
+            raise ValueError
         return
 
     def calc_num_beats(self):
