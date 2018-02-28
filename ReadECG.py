@@ -3,7 +3,7 @@ import logging as lg
 
 class GetData:
     def __init__(self, csv_file):
-        self.path = None
+        self.path = csv_file
         self.time = None
         self.volts = None
         self.verify_csv(csv_file)
