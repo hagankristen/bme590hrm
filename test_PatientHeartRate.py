@@ -5,6 +5,7 @@ import os
 import numpy as np
 import scipy.signal as sig
 import logging as lg
+import warnings
 
 
 
@@ -20,11 +21,6 @@ def test_load_ecg():
         PatientInfo('testdata.json')
     with pytest.raises(ImportError):
         PatientInfo('notreal.csv')
-
-
-def test_calc_volt_ex():
-    assert PatientInfo('test_data/test_data1.csv').voltage_extremes
-                        == (-.68, 1.05)
 
 
 def test_check_volt_range():
