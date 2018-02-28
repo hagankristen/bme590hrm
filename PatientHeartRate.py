@@ -33,7 +33,7 @@ class PatientInfo:
     def load_ecg(self):
         from ReadECG import GetData
         data = GetData(self.path)
-        self.volt = data.volt
+        self.volt = data.volts
         self.time = data.time
         lg.info(' | SUCCESS: ECG Data loaded into PatientInfo class.')
         return
@@ -45,11 +45,14 @@ class PatientInfo:
             auto_crop = auto[np.argmax(auto):-1]
             pks = sig.find_peaks_cwt(auto_crop, np.arange(1, 225))
             self.num_beats = len(pks)
+            if len(pks) == 0:
+                print('No peaks in ECG detected')
+                raise ValueError
+        except ValueError:
+            lg.debug(' | ABORTED: ValueError: No peaks detected.')
         except:
-            lg.debug(' | ABORTED: Unknown error during autocorrelation')
-        if len(pks) == 0:
-            print('No peaks in ECG detected')
-            raise ValueError
+            lg.debug(' | ABORTED: Unknown error during autocorrelation.')
+
         return self.num_beats
 
     def calc_volt_ex(self):
