@@ -8,7 +8,6 @@ import logging as lg
 import warnings
 
 
-
 def test_GetData():
     with pytest.raises(TypeError):
         GetData('testdata.json')
@@ -24,8 +23,8 @@ def test_load_ecg():
 
 
 def test_calc_volt_ex():
-    patient = PatientInfo('test_data/test_data1.csv')
-    assert(patient.voltage_extremes == (-.68, 1.05))
+    patient1 = PatientInfo('test_data1.csv')
+    assert(patient1.voltage_extremes == (-.68, 1.05))
 
 
 def test_check_volt_range():
@@ -34,5 +33,5 @@ def test_check_volt_range():
 
 
 def test_calc_duration():
-    patient = PatientInfo('test_data/test_data1.csv')
+    patient2 = PatientInfo('test_data/test_data1.csv')
     assert(np.isclose(patient.duration, 27.775))
