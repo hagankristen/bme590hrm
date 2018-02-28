@@ -27,11 +27,11 @@ class GetData:
             raise TypeError
             print('TypeError: File not .csv format.')
             lg.debug(' | ABORTED: TypeError: Input file not .csv format.')
-        elif flag is False:
+        if flag is False:
             print('OSError: File does not exist.')
             lg.debug(' | ABORTED: OSError: File does not exist.')
             raise OSError
-        else:
+        if flag is True and extension == '.csv':
             self.path = csv_file
         return
 
