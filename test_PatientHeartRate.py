@@ -46,8 +46,8 @@ def test_calc_num_beats():
     else:
         flag = False
     assert(flag)
-    patient2 = PatientInfo(GetData('test_data/test_data9.csv'))
-    if patient2.num_beats in range(25, 29):
+    patient2 = PatientInfo(GetData('test_data/test_data14.csv'))
+    if patient2.num_beats in range(15, 25):
         flag = True
     else:
         flag = False
