@@ -38,3 +38,17 @@ def test_calc_bpm():
     else:
         flag = False
     assert(flag)
+
+def test_calc_num_beats():
+    patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
+    if patient1.num_beats in range(33, 36):
+        flag = True
+    else:
+        flag = False
+    assert(flag)
+    patient2 = PatientInfo(GetData('test_data/test_data9.csv'))
+    if patient2.num_beats in range(25, 29):
+        flag = True
+    else:
+        flag = False
+    assert(flag)
