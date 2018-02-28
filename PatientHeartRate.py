@@ -56,6 +56,13 @@ class PatientInfo:
         return self.duration
 
     def calc_bpm(self):
+        """Calculates mean beats per min (heart rate) using
+                initialized duration and num_beats attributes
+
+        :param self: instance of PatientInfo
+        :returns mean_hr_bpm: mean beats per min heart rate as
+                                as PatientInfo attribute
+        """
         self.mean_hr_bpm = np.rint(self.num_beats/self.duration * 60)
         lg.info(' | SUCCESS: Mean bpm calculated.')
         return self.mean_hr_bpm
@@ -65,7 +72,7 @@ class PatientInfo:
 
         :param self: instance of PatientInfo
         :returns None: no return value
-        :raises UnknownError: if autocorrelation fails 
+        :raises UnknownError: if autocorrelation fails
         """
         try:
             auto = sig.correlate(self.volt, self.volt,
