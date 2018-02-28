@@ -17,5 +17,21 @@ def test_check_volt_range():
         PatientInfo(GetData('test_data/test_data32.csv'))
 
 def test_calc_duration():
-    patient2 = PatientInfo('test_data/test_data1.csv')
+    patient2 = PatientInfo(GetData('test_data/test_data1.csv'))
     assert(np.isclose(patient2.duration, 27.775))
+    patient3 = PatientInfo(GetData('test_data/test_data30.csv'))
+    assert(np.isclose(patient2.duration, 39.996))
+
+def calc_bpm(self):
+    patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
+    if patient1.mean_hr_bpm in range(73,77):
+        flag = True
+    else:
+        flag = False
+    assert(flag == True )
+    patient2 = PatientInfo(GetData('test_data/test_data30.csv'))
+    if patient1.mean_hr_bpm in range(116,122):
+        flag = True
+    else:
+        flag = False
+    assert(flag == True )
