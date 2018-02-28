@@ -14,7 +14,6 @@ class GetData:
                        format='%(asctime)s %(message)s',
                        datefmt='%m/%d/%Y %I:%M:%S %p')
 
-
     def verify_csv(self, csv_file):
         try:
             import os
@@ -29,8 +28,6 @@ class GetData:
         except TypeError:
             print('TypeError: File not .csv format.')
             lg.debug(' | ABORTED: TypeError: Input file not .csv format.')
-            raise TypeError
-
 
     def get_data(self, csv_path):
         try:
@@ -56,11 +53,9 @@ class GetData:
         except OSError:
             print('OSError: File does not exist.')
             lg.debug(' | ABORTED: OSError: File does not exist.')
-            raise OSError
         except IOError:
             lg.debug(' | ABORTED: IOError: Empty input file.')
             print('IOError: Empty input file.')
-            raise IOError
         except:
             print('Unknown Error: check input file.')
             lg.debug(' | ABORTED: Unknown error ocurred.')
