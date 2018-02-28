@@ -33,7 +33,7 @@ def test_calc_bpm():
         flag = False
     assert(flag)
     patient2 = PatientInfo(GetData('test_data/test_data30.csv'))
-    if patient1.mean_hr_bpm in range(116, 122):
+    if patient2.mean_hr_bpm in range(116, 122):
         flag = True
     else:
         flag = False
