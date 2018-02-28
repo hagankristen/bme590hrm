@@ -27,7 +27,7 @@ class GetData:
             raise TypeError
             print('TypeError: File not .csv format.')
             lg.debug(' | ABORTED: TypeError: Input file not .csv format.')
-        elif flag == False:
+        elif flag is False:
             print('OSError: File does not exist.')
             lg.debug(' | ABORTED: OSError: File does not exist.')
             raise OSError
