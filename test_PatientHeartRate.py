@@ -23,6 +23,11 @@ def test_load_ecg():
         PatientInfo('notreal.csv')
 
 
+def test_calc_volt_ex():
+    patient = PatientInfo('test_data/test_data1.csv')
+    assert(patient.voltage_extremes == (-.68, 1.05))
+
+
 def test_check_volt_range():
     with pytest.raises(ValueError):
         PatientInfo('test_data/test_data32.csv')
