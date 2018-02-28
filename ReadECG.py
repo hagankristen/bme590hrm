@@ -14,6 +14,7 @@ class GetData:
                        format='%(asctime)s %(message)s',
                        datefmt='%m/%d/%Y %I:%M:%S %p')
 
+
     def verify_csv(self, csv_file):
         try:
             import os
@@ -29,6 +30,7 @@ class GetData:
             print('TypeError: File not .csv format.')
             lg.debug(' | ABORTED: TypeError: Input file not .csv format.')
 
+
     def get_data(self, csv_path):
         try:
             import warnings
@@ -37,11 +39,9 @@ class GetData:
             print('ImportError: %s module not found.' % e.name)
             lg.debug(' | ABORTED: ImportError: %s' % e.name)
         try:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                data = np.genfromtxt(
-                    csv_path, delimiter=",", dtype=(float, float),
-                    names=['time', 'voltage'])
+            data = np.genfromtxt(
+                csv_path, delimiter=",", dtype=(float, float),
+                names=['time', 'voltage'])
             if len(data) == 0:
                 raise IOError
             else:
@@ -54,8 +54,8 @@ class GetData:
             print('OSError: File does not exist.')
             lg.debug(' | ABORTED: OSError: File does not exist.')
         except IOError:
-            lg.debug(' | ABORTED: IOError: Empty input file.')
-            print('IOError: Empty input file.')
+            print('IOError: File empty.')
+            lg.debug(' | ABORTED: IOError: Input file empty.')
         except:
             print('Unknown Error: check input file.')
             lg.debug(' | ABORTED: Unknown error ocurred.')
