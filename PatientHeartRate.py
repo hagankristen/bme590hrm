@@ -2,20 +2,18 @@ import os
 import numpy as np
 import scipy.signal as sig
 import logging as lg
-from ReadECG import GetData
 
 
 class PatientInfo:
-    def __init__(self, csv_path):
-        self.path = csv_path
-        self.volt = None
-        self.time = None
+    def __init__(self, patient):
+        self.path = patient.path
+        self.volt = patient.volts
+        self.time = patient.time
         self.voltage_extremes = None
         self.duration = None
         self.num_beats = None
         self.mean_hr_bpm = None
         self.beat_times = None
-        self.load_ecg()
         self.check_volt_range()
         self.check_interp()
         self.calc_volt_ex()
@@ -29,22 +27,6 @@ class PatientInfo:
                        level=lg.DEBUG,
                        format='%(asctime)s %(message)s',
                        datefmt='%m/%d/%Y %I:%M:%S %p')
-
-    def load_ecg(self):
-        from ReadECG import GetData
-        import sys
-        try:
-            data = GetData(self.path)
-            self.volt = data.volts
-            self.time = data.time
-            lg.info(' | SUCCESS: ECG Data loaded into PatientInfo class.')
-        except TypeError:
-            lg.debug(' | ABORTED: TypeError within GetData.')
-            print('TypeError within GetData.')
-        except OSError:
-            lg.debug(' | ABORTED: OSError within GetData.')
-            print('OSError within GetData.')
-        return
 
     def calc_num_beats(self):
         try:

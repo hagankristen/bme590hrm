@@ -52,7 +52,7 @@ class GetData:
                 raise IOError
             else:
                 self.time = data['time']
-                self.volt = data['voltage']
+                self.volts = data['voltage']
                 print('Success: ECG Data extracted from csv.')
                 lg.info(' | SUCCESS: ECG Data extracted from input csv file.')
         except IOError:
