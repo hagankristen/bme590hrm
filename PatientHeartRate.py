@@ -38,10 +38,12 @@ class PatientInfo:
             self.volt = data.volts
             self.time = data.time
             lg.info(' | SUCCESS: ECG Data loaded into PatientInfo class.')
-        except:
-            lg.debug(' | ABORTED: Error within GetData.')
-            print('Error within GetData.')
-            sys.exit(0)
+        except TypeError:
+            lg.debug(' | ABORTED: TypeError within GetData.')
+            print('TypeError within GetData.')
+        except OSError:
+            lg.debug(' | ABORTED: OSError within GetData.')
+            print('OSError within GetData.')
         return
 
     def calc_num_beats(self):
