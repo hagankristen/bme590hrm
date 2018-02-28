@@ -14,7 +14,7 @@ import warnings
 
 def test_check_volt_range():
     with pytest.raises(ValueError):
-        PatientInfo(GetData('/test_data/test_data32.csv'))
+        PatientInfo(GetData('test_data/test_data32.csv'))
 
 
 # def test_calc_duration():
