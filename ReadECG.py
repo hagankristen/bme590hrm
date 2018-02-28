@@ -24,15 +24,15 @@ class GetData:
         cwd = os.getcwd()
         csv_path = os.path.join(cwd, csv_file)
         extension = os.path.splitext(csv_file)[1]
-        flag = os.path.exists(csv_path)
+        print(flag)
         if extension != '.csv':
             print('TypeError: File not .csv format.')
             lg.debug(' | ABORTED: TypeError: Input file not .csv format.')
             raise TypeError
         elif flag is False:
             print('ImportError: File does not exist.')
-            lg.debug(' | ABORTED: ImportError: File does not exist.')
-            raise ImportError
+            lg.debug(' | ABORTED: OSError: File does not exist.')
+            raise OSError
         else:
             self.path = csv_path
 
