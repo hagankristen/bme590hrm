@@ -11,3 +11,5 @@ def test_GetData():
         GetData('test_data/test_data1.json')
     with pytest.raises(OSError):
         GetData('test_data/notreal.csv')
+    with pytest.raises(OSError):
+        GetData('test_data/test_data32.csv')
