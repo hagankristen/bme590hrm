@@ -7,6 +7,7 @@ import scipy.signal as sig
 import logging as lg
 
 
+
 def test_GetData():
     with pytest.raises(TypeError):
         GetData('testdata.json')
@@ -22,8 +23,8 @@ def test_load_ecg():
 
 
 def test_calc_volt_ex():
-    patient = PatientInfo('test_data/test_data1.csv')
-    assert patient.voltage_extremes == (-.68, 1.05)
+    assert PatientInfo('test_data/test_data1.csv').voltage_extremes
+                        == (-.68, 1.05)
 
 
 def test_check_volt_range():
