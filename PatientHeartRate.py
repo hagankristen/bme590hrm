@@ -2,61 +2,137 @@ import os
 import numpy as np
 import scipy.signal as sig
 import logging as lg
+from ReadECG import GetData
 
 
 class PatientInfo:
-    def __init__(self, patient):
-        """Returns PatientInfo class that contains path, ECG data,
-                            and attributes
+    def __init__(self, csv_path):
+        self.path = csv_path
+        self.volt = None
+        self.time = None
+        self.voltage_extremes = None
+        self.duration = None
+        self.num_beats = None
+        self.mean_hr_bpm = None
+        self.beat_times = None
+        self.load_ecg()
+        self.check_volt_range()
+        self.check_interp()
+        self.calc_volt_ex()
+        self.calc_duration()
+        self.calc_num_beats()
+        self.calc_bpm()
+        self.calc_beat_times()
+        self.write_json()
 
-        :param patient: instance of GetData class
-        :returns self: instance of initialized PatientInfo
-        """
-        self.name = patient.path_name
-        self.ecg = patient.data
-        self.voltage_extremes = self.calc_volt_ex()
-        self.duration = self.calc_duration()
-        self.num_beats = self.calc_num_beats()
-        self.mean_hr_bpm = self.calc_bpm()
-        self.beat_times = self.calc_beat_times()
+        lg.basicConfig(filename='PatientHeartRate.log',
+                       level=lg.DEBUG,
+                       format='%(asctime)s %(message)s',
+                       datefmt='%m/%d/%Y %I:%M:%S %p')
+
+    def load_ecg(self):
+        from ReadECG import GetData
+        data = GetData(self.path)
+        self.volt = data.volt
+        self.time = data.time
+        lg.info(' | SUCCESS: ECG Data loaded into PatientInfo class.')
+        return
 
     def calc_num_beats(self):
-        data = self.ecg
-        voltz = data[:, 1]
-        time = data[:, 0]
-        auto = sig.correlate(voltz, voltz, mode='full', method='auto')
-        auto_crop = auto[np.argmax(auto):-1]
-        pks = sig.find_peaks_cwt(auto_crop, np.arange(1, 225))
-        self.num_beats = len(pks)
+        try:
+            auto = sig.correlate(self.volt, self.volt,
+                                 mode='full', method='auto')
+            auto_crop = auto[np.argmax(auto):-1]
+            pks = sig.find_peaks_cwt(auto_crop, np.arange(1, 225))
+            self.num_beats = len(pks)
+        except:
+            lg.debug(' | ABORTED: Unknown error during autocorrelation')
         if len(pks) == 0:
             print('No peaks in ECG detected')
             raise ValueError
         return self.num_beats
 
     def calc_volt_ex(self):
-        data = self.ecg
-        voltz = data[:, 1]
-        self.voltage_extremes = (np.nanmin(voltz), np.nanmax(voltz))
+        self.voltage_extremes = (np.nanmin(self.volt), np.nanmax(self.volt))
+        lg.info(' | SUCCESS: Voltage extremes calculated.')
         return self.voltage_extremes
 
     def calc_duration(self):
-        data = self.ecg
-        time = data[:, 0]
-        self.duration = time[-1] - time[0]
+        self.duration = self.time[-1] - self.time[0]
+        lg.info(' | SUCCESS: ECG strip duration calculated.')
         return self.duration
 
     def calc_bpm(self):
-        period = self.duration
-        beats = self.num_beats
-        self.mean_hr_bpm = np.rint(beats/period * 60)
+        self.mean_hr_bpm = np.rint(self.num_beats/self.duration * 60)
+        lg.info(' | SUCCESS: Mean bpm calculated.')
         return self.mean_hr_bpm
 
     def calc_beat_times(self):
-        data = self.ecg
-        voltz = data[:, 1]
-        time = data[:, 0]
-        auto = sig.correlate(voltz, voltz, mode='full', method='auto')
-        auto_crop = auto[np.argmax(auto):-1]
-        pks = sig.find_peaks_cwt(auto_crop, np.arange(1, 225))
-        self.beat_times = time[pks]
+        try:
+            auto = sig.correlate(self.volt, self.volt,
+                                 mode='full', method='auto')
+            auto_crop = auto[np.argmax(auto):-1]
+            pks = sig.find_peaks_cwt(auto_crop, np.arange(1, 225))
+            self.beat_times = self.time[pks]
+            lg.info(' | SUCCESS: Times of beats calculated.')
+        except:
+            lg.debug(' | ABORTED: Unknown error during autocorrelation')
         return self.beat_times
+
+    def check_volt_range(self):
+        """Checks voltage data to ensure values do not exceed 300 mV
+
+        :param self: instance of PatientInfo
+        :returns None: no return value
+        :raises ValueError: if any ECG voltage in data is greater or
+                            equal to 300 mV
+        """
+        if any(i >= 300 for i in self.volt):
+            lg.debug(' | ABORTED: ValueError: ECG voltage exceeds 300 mV')
+            raise ValueError
+        else:
+            lg.info(' | SUCCESS: ECG Data within accepted voltage range.')
+        return
+
+    def check_interp(self):
+        """Checks ECG data for missing values and interpolates
+
+        :param patient: instance of PatientInfo
+        :returns patient: self with interpolated data values
+        """
+        if np.isnan(self.time).any():
+            nans, x = np.isnan(self.time), lambda z: z.nonzero()[0]
+            self.time[nans] = np.interp(x(nans), x(~nans), self.time[~nans])
+            print('Imported time data requires interpolation.')
+            lg.info(' | SUCCESS: ECG time data interpolated.')
+        if np.isnan(self.volt).any():
+            nans, x = np.isnan(self.volt), lambda z: z.nonzero()[0]
+            self.volt[nans] = np.interp(x(nans), x(~nans), self.volt[~nans])
+            print('Imported voltage data requires interpolation.')
+            lg.info(' | SUCCESS: ECG voltage data interpolated.')
+        return
+
+    def write_json(self):
+        """Write .json file containing attributes of ecg data
+
+        :param patient: instance of PatientInfo
+        :returns None: no return value
+        """
+        import json
+        import os
+        name = os.path.basename(self.path)
+        name = os.path.splitext(name)[0]
+        json_name = name + '.json'
+        write_data = {
+            'Mean BPM': self.mean_hr_bpm,
+            'Voltage Extremes': self.voltage_extremes,
+            'ECG Duration': self.duration,
+            'Number of Beats': self.num_beats,
+            'Times of Beats': self.beat_times.tolist(),
+        }
+        with open(json_name, 'w') as f:
+            save = json.dump(write_data, f, sort_keys=True)
+        lg.info(' | SUCCESS: ECG data written to json file.')
+        print('Success: ECG data written to .json file.')
+
+        return

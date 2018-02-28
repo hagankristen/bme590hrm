@@ -1,27 +1,58 @@
+import logging as lg
+
+
 class GetData:
     def __init__(self, csv_file):
-        """Returns GetData class that contains path and ECG data
-                            from csv file
+        self.path = None
+        self.time = None
+        self.volts = None
+        self.verify_csv(csv_file)
+        self.get_data()
 
-        :param csv_file: path to input csv file
-        :returns self: instance of GetData
-        :raises TypeError: if csv file nonexistent or not .csv
-        :raises IOError: if input csv is empty
-        """
-        import os
-        import numpy as np
-        import warnings
+        lg.basicConfig(filename='GetData.log',
+                       level=lg.DEBUG,
+                       format='%(asctime)s %(message)s',
+                       datefmt='%m/%d/%Y %I:%M:%S %p')
 
+    def verify_csv(self, csv_file):
+        try:
+            import os
+        except ImportError as e:
+            print('ImportError: %s module not found.' % e.name)
+            lg.debug(' | ABORTED: ImportError: %s' % e.name)
+
+        cwd = os.getcwd()
+        csv_path = os.path.join(cwd, csv_file)
         extension = os.path.splitext(csv_file)[1]
+        flag = os.path.exists(csv_path)
         if extension != '.csv':
+            print('TypeError: File not .csv format.')
+            lg.debug(' | ABORTED: TypeError: Input file not .csv format.')
             raise TypeError
-        flag = os.path.exists(csv_file)
-        if flag is False:
-            raise TypeError
-        self.path_name = csv_file
+        elif flag is False:
+            print('ImportError: File does not exist.')
+            lg.debug(' | ABORTED: ImportError: File does not exist.')
+            raise ImportError
+        else:
+            self.path = csv_path
+
+    def get_data(self):
+        try:
+            import warnings
+            import numpy as np
+        except ImportError as e:
+            print('ImportError: %s module not found.' % e.name)
+            lg.debug(' | ABORTED: ImportError: %s' % e.name)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            self.data = np.genfromtxt(
-                csv_file, delimiter=",", dtype=(float, float))
-        if len(self.data) == 0:
+            data = np.genfromtxt(
+                self.path, delimiter=",", dtype=(float, float),
+                names=['time', 'voltage'])
+        if len(data) == 0:
             raise IOError
+            lg.debug(' | ABORTED: IOError: Empty input file.')
+        else:
+            self.time = data['time']
+            self.volt = data['voltage']
+            print('Success: ECG Data extracted from csv.')
+            lg.info(' | SUCCESS: ECG Data extracted from input csv file.')
