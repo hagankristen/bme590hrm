@@ -12,3 +12,13 @@ def test_GetData():
         GetData('testdata.json')
     with pytest.raises(ImportError):
         GetData('notreal.csv')
+
+
+def test_calc_volt_ex():
+    patient = PatientInfo('test_data/test_data1')
+    assert patient.voltage_extremes == (-.68, 1.05)
+
+
+def test_check_volt_range():
+    with pytest.raises(ValueError):
+        PatientInfo('test_data/test_data32')
