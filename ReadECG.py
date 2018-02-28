@@ -22,6 +22,8 @@ class GetData:
             lg.debug(' | ABORTED: ImportError: %s' % e.name)
 
         extension = os.path.splitext(csv_file)[1]
+        cwd = os.cwd()
+        print(cwd)
         flag = os.path.exists(csv_file)
         print(csv_file)
         print(flag)
