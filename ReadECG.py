@@ -7,7 +7,7 @@ class GetData:
         self.time = None
         self.volts = None
         self.verify_csv(csv_file)
-        self.get_data(csv_file)
+        self.get_data()
 
         lg.basicConfig(filename='GetData.log',
                        level=lg.DEBUG,
@@ -22,13 +22,20 @@ class GetData:
             lg.debug(' | ABORTED: ImportError: %s' % e.name)
 
         extension = os.path.splitext(csv_file)[1]
+        flag = os.path.exists(csv_file)
         if extension != '.csv':
             raise TypeError
             print('TypeError: File not .csv format.')
             lg.debug(' | ABORTED: TypeError: Input file not .csv format.')
-        
+        elif flag == False:
+            print('OSError: File does not exist.')
+            lg.debug(' | ABORTED: OSError: File does not exist.')
+            raise OSError
+        else:
+            self.path = csv_file
+        return
 
-    def get_data(self, csv_path):
+    def get_data(self):
         try:
             import warnings
             import numpy as np
@@ -36,23 +43,22 @@ class GetData:
             print('ImportError: %s module not found.' % e.name)
             lg.debug(' | ABORTED: ImportError: %s' % e.name)
         try:
-            data = np.genfromtxt(
-                csv_path, delimiter=",", dtype=(float, float),
-                names=['time', 'voltage'])
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                data = np.genfromtxt(
+                    self.path, delimiter=",", dtype=(float, float),
+                    names=['time', 'voltage'])
             if len(data) == 0:
                 raise IOError
             else:
-                self.path = csv_path
                 self.time = data['time']
                 self.volt = data['voltage']
                 print('Success: ECG Data extracted from csv.')
                 lg.info(' | SUCCESS: ECG Data extracted from input csv file.')
-        except OSError:
-            print('OSError: File does not exist.')
-            lg.debug(' | ABORTED: OSError: File does not exist.')
         except IOError:
             print('IOError: File empty.')
             lg.debug(' | ABORTED: IOError: Input file empty.')
         except:
             print('Unknown Error: check input file.')
             lg.debug(' | ABORTED: Unknown error ocurred.')
+        return
