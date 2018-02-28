@@ -14,7 +14,6 @@ class GetData:
                        format='%(asctime)s %(message)s',
                        datefmt='%m/%d/%Y %I:%M:%S %p')
 
-
     def verify_csv(self, csv_file):
         try:
             import os
@@ -22,14 +21,12 @@ class GetData:
             print('ImportError: %s module not found.' % e.name)
             lg.debug(' | ABORTED: ImportError: %s' % e.name)
 
-        try:
-            extension = os.path.splitext(csv_file)[1]
-            if extension != '.csv':
-                raise TypeError
-        except TypeError:
+        extension = os.path.splitext(csv_file)[1]
+        if extension != '.csv':
+            raise TypeError
             print('TypeError: File not .csv format.')
             lg.debug(' | ABORTED: TypeError: Input file not .csv format.')
-
+        
 
     def get_data(self, csv_path):
         try:
