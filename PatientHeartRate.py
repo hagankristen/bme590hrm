@@ -32,6 +32,7 @@ class PatientInfo:
 
     def load_ecg(self):
         from ReadECG import GetData
+        import sys
         try:
             data = GetData(self.path)
             self.volt = data.volts
@@ -40,7 +41,7 @@ class PatientInfo:
         except:
             lg.debug(' | ABORTED: Error within GetData.')
             print('Error within GetData.')
-            raise ValueError
+            sys.exit(0)
         return
 
     def calc_num_beats(self):
