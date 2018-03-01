@@ -41,8 +41,7 @@ class PatientInfo:
             pks = sig.find_peaks_cwt(
                 np.square(auto_crop), widths=wid, min_length=60)
             if len(pks) == 0:
-                print('No peaks in ECG detected')
-                raise ValueError
+                raise ValueError('No peaks in ECG detected')
             else:
                 self.num_beats = len(pks)
                 self.mean_hr_bpm = np.rint(self.num_beats/self.duration * 60)
@@ -84,12 +83,14 @@ class PatientInfo:
         :raises ValueError: if any ECG voltage in data is greater or
                             equal to 300 mV
         """
-        if any(i >= 300 for i in self.volt):
-            lg.debug(' | ABORTED: ValueError: ECG voltage exceeds 300 mV')
-            print('ValueError: ECG voltage exceeds 300 mV')
-            raise ValueError
-        else:
-            lg.info(' | SUCCESS: ECG Data within accepted voltage range.')
+        try:
+            if any(i >= 300 for i in self.volt):
+                lg.debug(' | ABORTED: ValueError: ECG voltage exceeds 300 mV')
+                raise ValueError('ValueError: ECG voltage exceeds 300 mV')
+            else:
+                lg.info(' | SUCCESS: ECG Data within accepted voltage range.')
+        except ValueError:
+            print('Voltage values in input file not in suitable range.')
         return
 
     def check_interp(self):
@@ -138,5 +139,5 @@ class PatientInfo:
         except:
             lg.debug(' | ABORTED: Error writing json file.')
             print('UnknownError during writing of .json file')
-            raise
+            raise('UnknownError during writing of .json file')
         return
