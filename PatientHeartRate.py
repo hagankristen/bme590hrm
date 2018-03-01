@@ -14,8 +14,8 @@ class PatientInfo:
         self.num_beats = None
         self.mean_hr_bpm = None
         self.beat_times = None
-        self.check_volt_range()
         self.check_interp()
+        self.check_volt_range()
         self.calc_volt_ex()
         self.calc_duration()
         self.calc_beats()
@@ -57,9 +57,10 @@ class PatientInfo:
         return
 
     def calc_volt_ex(self):
-        """Determines maximum and minimum of voltage data
+        """Determines maximum and minimum of voltage data (excluding nan)
 
         :param self: instance of PatientInfo
+        :returns voltage_extremes: tuple of min and max voltages
         """
         self.voltage_extremes = (np.nanmin(self.volt), np.nanmax(self.volt))
         lg.info(' | SUCCESS: Voltage extremes calculated.')
@@ -79,22 +80,22 @@ class PatientInfo:
         """Checks voltage data to ensure values do not exceed 300 mV
 
         :param self: instance of PatientInfo
-        :returns None: no return value
         :raises ValueError: if any ECG voltage in data is greater or
                             equal to 300 mV
         """
         if any(i >= 300 for i in self.volt):
             lg.debug(' | ABORTED: ValueError: ECG voltage exceeds 300 mV')
+            print('ValueError: ECG voltage exceeds 300 mV')
             raise ValueError
         else:
             lg.info(' | SUCCESS: ECG Data within accepted voltage range.')
         return
 
     def check_interp(self):
-        """Checks ECG data for missing values and interpolates
+        """Checks ECG data for missing time and voltages values,
+            interpolates if needed, saves back to self
 
         :param patient: instance of PatientInfo
-        :returns patient: self with interpolated data values
         """
         if np.isnan(self.time).any():
             nans, x = np.isnan(self.time), lambda z: z.nonzero()[0]
@@ -112,7 +113,6 @@ class PatientInfo:
         """Write .json file containing attributes of ecg data
 
         :param patient: instance of PatientInfo
-        :returns None: no return value
         """
         import json
         import os
@@ -126,9 +126,13 @@ class PatientInfo:
             'Number of Beats': self.num_beats,
             'Times of Beats': self.beat_times.tolist(),
         }
-        with open(json_name, 'w') as f:
-            save = json.dump(write_data, f, sort_keys=True)
-        lg.info(' | SUCCESS: ECG data written to json file.')
-        print('Success: ECG data written to .json file.')
-
+        try:
+            with open(json_name, 'w') as f:
+                save = json.dump(write_data, f, sort_keys=True)
+            lg.info(' | SUCCESS: ECG data written to json file.')
+            print('Success: ECG data written to .json file.')
+        except:
+            lg.debug(' | ABORTED: Error writing json file.')
+            print('UnknownError during writing of .json file')
+            raise
         return
