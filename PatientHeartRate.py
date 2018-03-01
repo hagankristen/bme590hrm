@@ -19,9 +19,6 @@ class PatientInfo:
         self.calc_volt_ex()
         self.calc_duration()
         self.calc_beats()
-#        self.calc_num_beats()
-#        self.calc_bpm()
-#        self.calc_beat_times()
         self.write_json()
 
         lg.basicConfig(filename='PatientHeartRate.log',
@@ -60,11 +57,20 @@ class PatientInfo:
         return
 
     def calc_volt_ex(self):
+        """Determines maximum and minimum of voltage data
+
+        :param self: instance of PatientInfo
+        """
         self.voltage_extremes = (np.nanmin(self.volt), np.nanmax(self.volt))
         lg.info(' | SUCCESS: Voltage extremes calculated.')
         return self.voltage_extremes
 
     def calc_duration(self):
+        """Calculates time of ECG measurement
+
+        :param self: instance of PatientInfo
+        :returns duration: duration of strip (s)
+        """
         self.duration = self.time[-1] - self.time[0]
         lg.info(' | SUCCESS: ECG strip duration calculated.')
         return self.duration

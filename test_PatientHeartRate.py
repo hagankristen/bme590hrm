@@ -11,6 +11,8 @@ import warnings
 def test_calc_volt_ex():
     patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
     assert(patient1.voltage_extremes == (-0.68, 1.05))
+    patient2 = PatientInfo(GetData('test_data/test_data9.csv'))
+    assert(patient2.voltage_extremes == (-1.07, 0.255))
 
 
 def test_check_volt_range():
@@ -45,7 +47,7 @@ def test_calc_beats():
                         19.64, 20.44, 21.22, 22.02, 22.79, 23.61,
                         24.44, 25.3, 26.11])
     diff1 = np.absolute(result1-actual1)
-    assert(all(i <= 0.1 for i in diff1))
+    assert(all(i <= 0.2 for i in diff1))
     patient2 = PatientInfo(GetData('test_data/test_data18.csv'))
     if patient2.num_beats in range(15, 20):
         flag = True
@@ -62,4 +64,4 @@ def test_calc_beats():
                         5.249, 5.994, 6.749, 7.471, 8.224, 8.976, 9.729,
                         10.5, 11.25, 12, 12.69, 13.5 ])
     diff2 = np.absolute(result2-actual2)
-    assert(all(i <= 0.1 for i in diff2))
+    assert(all(i <= 0.2 for i in diff2))

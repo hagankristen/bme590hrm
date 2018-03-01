@@ -15,6 +15,14 @@ class GetData:
                        datefmt='%m/%d/%Y %I:%M:%S %p')
 
     def verify_csv(self, csv_file):
+        """Verifies that input csv path is .csv format and
+            that it exists
+
+        :param self: instance of GetData
+        :raises ImportError: if module missing
+        :raises TypeError: if not .csv format
+        :raises OSError: if input file does not exist
+        """
         try:
             import os
         except ImportError as e:
@@ -34,9 +42,18 @@ class GetData:
             lg.debug(' | ABORTED: OSError: File does not exist.')
         if flag is True and extension == '.csv':
             self.path = csv_file
+            lg.info(' | SUCCESS: Input csv file OK to process.')
         return
 
     def get_data(self):
+        """ Gets data from the csv file and assigns values
+            to GetData instance
+
+        :param self: instance of GetData
+        :raises ImportError: if module missing
+        :raises UnknownError: if error occurs during data collection
+        :raises IOError: if file is empty
+        """
         try:
             import warnings
             import numpy as np
