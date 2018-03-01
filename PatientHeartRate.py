@@ -18,9 +18,10 @@ class PatientInfo:
         self.check_interp()
         self.calc_volt_ex()
         self.calc_duration()
-        self.calc_num_beats()
-        self.calc_bpm()
-        self.calc_beat_times()
+        self.calc_beats()
+#        self.calc_num_beats()
+#        self.calc_bpm()
+#        self.calc_beat_times()
         self.write_json()
 
         lg.basicConfig(filename='PatientHeartRate.log',
@@ -28,22 +29,40 @@ class PatientInfo:
                        format='%(asctime)s %(message)s',
                        datefmt='%m/%d/%Y %I:%M:%S %p')
 
-    def calc_num_beats(self):
+
+    def calc_beats(self):
+        """Calculates mean beats per min (heart rate),
+                num_beats and beat times attributes
+
+        :param self: instance of PatientInfo
+        :raises UnknownError: if peak detection fails
+        :raises ValueError: if no beats detected
+        """
         try:
+#            f1 = 1/24
+#            f2 = 1/2
+#            flt1, flt2 = sig.butter(8, [f1, f2], btype='bandpass')
+#            filt = sig.lfilter(flt1, flt2, self.volt)
             auto = sig.correlate(self.volt, self.volt,
                                  mode='full', method='auto')
             auto_crop = auto[np.argmax(auto):-1]
-            pks = sig.find_peaks_cwt(auto_crop, np.arange(1, 225))
-            self.num_beats = len(pks)
+            wid = np.arange(25, 50)
+            pks = sig.find_peaks_cwt(np.square(auto_crop), widths = wid)
             if len(pks) == 0:
                 print('No peaks in ECG detected')
                 raise ValueError
+            else:
+                self.num_beats = len(pks)
+                self.mean_hr_bpm = self.num_beats/self.duration *60;
+                self.beat_times = self.time[pks]
+                lg.info(' | SUCCESS: Times of beats calculated.')
+                lg.info(' | SUCCESS: Mean heart rate calculated.')
+                lg.info(' | SUCCESS: Number of beats calculated.')
         except ValueError:
             lg.debug(' | ABORTED: ValueError: No peaks detected.')
         except:
-            lg.debug(' | ABORTED: Unknown error during autocorrelation.')
-
-        return self.num_beats
+            lg.debug(' | ABORTED: Unknown error during peak detection.')
+        return
 
     def calc_volt_ex(self):
         self.voltage_extremes = (np.nanmin(self.volt), np.nanmax(self.volt))
@@ -54,36 +73,6 @@ class PatientInfo:
         self.duration = self.time[-1] - self.time[0]
         lg.info(' | SUCCESS: ECG strip duration calculated.')
         return self.duration
-
-    def calc_bpm(self):
-        """Calculates mean beats per min (heart rate) using
-                initialized duration and num_beats attributes
-
-        :param self: instance of PatientInfo
-        :returns mean_hr_bpm: mean beats per min heart rate as
-                                as PatientInfo attribute
-        """
-        self.mean_hr_bpm = np.rint(self.num_beats/self.duration * 60)
-        lg.info(' | SUCCESS: Mean bpm calculated.')
-        return self.mean_hr_bpm
-
-    def calc_beat_times(self):
-        """Calculates times at which a beat occurs using autocorrelation
-
-        :param self: instance of PatientInfo
-        :returns None: no return value
-        :raises UnknownError: if autocorrelation fails
-        """
-        try:
-            auto = sig.correlate(self.volt, self.volt,
-                                 mode='full', method='auto')
-            auto_crop = auto[np.argmax(auto):-1]
-            pks = sig.find_peaks_cwt(auto_crop, np.arange(1, 225))
-            self.beat_times = self.time[pks]
-            lg.info(' | SUCCESS: Times of beats calculated.')
-        except:
-            lg.debug(' | ABORTED: Unknown error during autocorrelation')
-        return self.beat_times
 
     def check_volt_range(self):
         """Checks voltage data to ensure values do not exceed 300 mV
