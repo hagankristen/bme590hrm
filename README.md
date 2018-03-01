@@ -1,2 +1,4 @@
 # bme590hrm
 HeartRateMonitor
+
+This code analyzes ECG contained in an input csv file- determining mean heart rate (mean_hr_bpm), number of beats (num_beats) over the test time (duration), voltage minimum and maximum (voltage_extremes) , and the times at which the detected heart beats occurred (beat_times). Run the code by typing "ProcessECG.py" in command line. User prompt will appear which takes in path to desired data file from the current working directory. (EX: test_data/test_data1.csv). ProcessECG creates two classes, GetData (processes csv to data in numpy array) and PatientInfo (uses GetData instance to calculate heart monitor info). GetData is in ReadECG.py and PatientInfo is in PatientHeartRate.py. 
