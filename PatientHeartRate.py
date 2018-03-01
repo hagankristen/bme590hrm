@@ -37,8 +37,8 @@ class PatientInfo:
             auto = sig.correlate(self.volt, self.volt,
                                  mode='full', method='auto')
             auto_crop = auto[np.argmax(auto):-1]
-            wid = np.arange(25, 50)
-            pks = sig.find_peaks_cwt(np.square(auto_crop), widths=wid)
+            wid = np.arange(10, 250)
+            pks = sig.find_peaks_cwt(np.square(auto_crop), widths=wid, min_length = 60)
             if len(pks) == 0:
                 print('No peaks in ECG detected')
                 raise ValueError
