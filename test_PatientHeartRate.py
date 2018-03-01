@@ -62,6 +62,6 @@ def test_calc_beats():
     result2 = patient2.beat_times
     actual2 = np.array([0, .749, 1.499, 2.249,  2.999, 3.746, 4.499,
                         5.249, 5.994, 6.749, 7.471, 8.224, 8.976, 9.729,
-                        10.5, 11.25, 12, 12.69, 13.5 ])
+                        10.5, 11.25, 12, 12.69, 13.5])
     diff2 = np.absolute(result2-actual2)
     assert(all(i <= 0.2 for i in diff2))
