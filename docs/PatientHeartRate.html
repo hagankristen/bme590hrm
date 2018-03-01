@@ -1,0 +1,207 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PatientHeartRate module &#8212; HeartRateMonitor 1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ProcessECG module" href="ProcessECG.html" />
+    <link rel="prev" title="bme590hrm" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-PatientHeartRate">
+<span id="patientheartrate-module"></span><h1>PatientHeartRate module<a class="headerlink" href="#module-PatientHeartRate" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="PatientHeartRate.PatientInfo">
+<em class="property">class </em><code class="descclassname">PatientHeartRate.</code><code class="descname">PatientInfo</code><span class="sig-paren">(</span><em>patient</em><span class="sig-paren">)</span><a class="headerlink" href="#PatientHeartRate.PatientInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="PatientHeartRate.PatientInfo.calc_beats">
+<code class="descname">calc_beats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PatientHeartRate.PatientInfo.calc_beats" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Calculates mean beats per min (heart rate),</dt>
+<dd>num_beats and beat times attributes</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>self</strong> – instance of PatientInfo</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>UnknownError</strong> – if peak detection fails</li>
+<li><strong>ValueError</strong> – if no beats detected</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PatientHeartRate.PatientInfo.calc_duration">
+<code class="descname">calc_duration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PatientHeartRate.PatientInfo.calc_duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates time of ECG measurement</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>self</strong> – instance of PatientInfo</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns duration:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">duration of strip (s)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PatientHeartRate.PatientInfo.calc_volt_ex">
+<code class="descname">calc_volt_ex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PatientHeartRate.PatientInfo.calc_volt_ex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines maximum and minimum of voltage data (excluding nan)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>self</strong> – instance of PatientInfo</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns voltage_extremes:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">tuple of min and max voltages</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PatientHeartRate.PatientInfo.check_interp">
+<code class="descname">check_interp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PatientHeartRate.PatientInfo.check_interp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Checks ECG data for missing time and voltages values,</dt>
+<dd>interpolates if needed, saves back to self</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>self</strong> – instance of PatientInfo</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PatientHeartRate.PatientInfo.check_volt_range">
+<code class="descname">check_volt_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PatientHeartRate.PatientInfo.check_volt_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks voltage data to ensure values do not exceed 300 mV</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>self</strong> – instance of PatientInfo</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if any ECG voltage in data is greater or
+equal to 300 mV</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PatientHeartRate.PatientInfo.write_json">
+<code class="descname">write_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PatientHeartRate.PatientInfo.write_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write .json file containing attributes of ecg data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>self</strong> – instance of PatientInfo</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>UnknownError</strong> – if writing .json file fails”</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">bme590hrm</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">bme590hrm</a></li>
+      <li>Next: <a href="ProcessECG.html" title="next chapter">ProcessECG module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/PatientHeartRate.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kristen Hagan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/PatientHeartRate.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
