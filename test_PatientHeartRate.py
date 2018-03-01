@@ -30,36 +30,21 @@ def test_calc_duration():
 
 def test_calc_beats():
     patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
-    if patient1.mean_hr_bpm in range(70, 75):
-        flag = True
-    else:
-        flag = False
-    assert(flag)
-    if patient1.num_beats in range(30, 35):
-        flag = True
-    else:
-        flag = False
-    assert(flag)
+    assert pytest.approx(patient1.num_beats, 5) == 32
+    assert pytest.approx(patient1.mean_hr_bpm, 5) == 72
     result1 = patient1.beat_times
-    actual1 = np.array([0, .817, 1.617, 2.367, 3.372, 3.975, 4.797,
-                        5.556, 6.54, 7.292, 8.097, 9.017, 9.769,
-                        10.64, 11.46, 12.3, 13.15, 13.81,
-                        14.61, 15.54, 16.32, 17.16, 18.02, 18.88,
-                        19.64, 20.44, 21.22, 22.02, 22.79, 23.61,
-                        24.44, 25.3, 26.11])
+    actual1 = np.array([0.108, 0.792, 1.636, 2.308, 3.311, 4.1,
+                        4.903, 5.661, 6.556, 7.384, 8.253, 8.997,
+                        9.769, 10.6, 11.47, 12.29, 13.01,
+                        14, 14.73, 15.44, 16.33, 17.15,
+                        18, 18.82, 19.64, 20.41, 21.18,
+                        21.97, 22.78, 23.59, 24.43, 25.27,
+                        26.77])
     diff1 = np.absolute(result1-actual1)
     assert(all(i <= 0.2 for i in diff1))
     patient2 = PatientInfo(GetData('test_data/test_data18.csv'))
-    if patient2.num_beats in range(15, 20):
-        flag = True
-    else:
-        flag = False
-    assert(flag)
-    if patient2.mean_hr_bpm in range(80, 85):
-        flag = True
-    else:
-        flag = False
-    assert(flag)
+    assert pytest.approx(patient2.num_beats, 5) == 18
+    assert pytest.approx(patient2.mean_hr_bpm, 5) == 62
     result2 = patient2.beat_times
     actual2 = np.array([0, .749, 1.499, 2.249,  2.999, 3.746, 4.499,
                         5.249, 5.994, 6.749, 7.471, 8.224, 8.976, 9.729,
