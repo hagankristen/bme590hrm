@@ -10,7 +10,7 @@ class PatientInfo:
         self.duration = None
         self.num_beats = None
         self.mean_hr_bpm = None
-        self.beat_times = None
+        self.beats = None
         self.check_interp()
         self.check_volt_range()
         self.calc_volt_ex()
@@ -45,7 +45,7 @@ class PatientInfo:
             else:
                 self.num_beats = len(pks)
                 self.mean_hr_bpm = np.rint(self.num_beats/self.duration * 60)
-                self.beat_times = self.time[pks]
+                self.beats = self.time[pks]
                 lg.info(' | SUCCESS: Times of beats calculated.')
                 lg.info(' | SUCCESS: Mean heart rate calculated.')
                 lg.info(' | SUCCESS: Number of beats calculated.')
@@ -131,7 +131,7 @@ class PatientInfo:
             'Voltage Extremes': self.voltage_extremes,
             'ECG Duration': self.duration,
             'Number of Beats': self.num_beats,
-            'Times of Beats': self.beat_times.tolist(),
+            'Times of Beats': self.beats.tolist(),
         }
         try:
             with open(json_name, 'w') as f:

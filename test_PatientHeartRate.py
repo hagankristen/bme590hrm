@@ -32,7 +32,7 @@ def test_calc_beats():
     patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
     assert pytest.approx(patient1.num_beats, 5) == 32
     assert pytest.approx(patient1.mean_hr_bpm, 5) == 72
-    result1 = patient1.beat_times
+    result1 = patient1.beats
     actual1 = np.array([0.108, 0.792, 1.636, 2.308, 3.311, 4.1,
                         4.903, 5.661, 6.556, 7.384, 8.253, 8.997,
                         9.769, 10.6, 11.47, 12.29, 13.01,
@@ -45,7 +45,7 @@ def test_calc_beats():
     patient2 = PatientInfo(GetData('test_data/test_data18.csv'))
     assert pytest.approx(patient2.num_beats, 5) == 18
     assert pytest.approx(patient2.mean_hr_bpm, 5) == 62
-    result2 = patient2.beat_times
+    result2 = patient2.beats
     actual2 = np.array([0, .749, 1.499, 2.249,  2.999, 3.746, 4.499,
                         5.249, 5.994, 6.749, 7.471, 8.224, 8.976, 9.729,
                         10.5, 11.25, 12, 12.69, 13.5])
@@ -73,4 +73,4 @@ def test_write_json():
                        np.array(patient1.voltage_extremes)))
     assert(np.isclose(d['Number of Beats'], patient1.num_beats))
     assert(np.isclose(d['Mean BPM'], patient1.mean_hr_bpm))
-    assert(np.allclose(d['Times of Beats'], patient1.beat_times))
+    assert(np.allclose(d['Times of Beats'], patient1.beats))
