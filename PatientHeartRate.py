@@ -29,7 +29,6 @@ class PatientInfo:
                        format='%(asctime)s %(message)s',
                        datefmt='%m/%d/%Y %I:%M:%S %p')
 
-
     def calc_beats(self):
         """Calculates mean beats per min (heart rate),
                 num_beats and beat times attributes
@@ -39,21 +38,17 @@ class PatientInfo:
         :raises ValueError: if no beats detected
         """
         try:
-#            f1 = 1/24
-#            f2 = 1/2
-#            flt1, flt2 = sig.butter(8, [f1, f2], btype='bandpass')
-#            filt = sig.lfilter(flt1, flt2, self.volt)
             auto = sig.correlate(self.volt, self.volt,
                                  mode='full', method='auto')
             auto_crop = auto[np.argmax(auto):-1]
             wid = np.arange(25, 50)
-            pks = sig.find_peaks_cwt(np.square(auto_crop), widths = wid)
+            pks = sig.find_peaks_cwt(np.square(auto_crop), widths=wid)
             if len(pks) == 0:
                 print('No peaks in ECG detected')
                 raise ValueError
             else:
                 self.num_beats = len(pks)
-                self.mean_hr_bpm = self.num_beats/self.duration *60;
+                self.mean_hr_bpm = np.rint(self.num_beats/self.duration * 60)
                 self.beat_times = self.time[pks]
                 lg.info(' | SUCCESS: Times of beats calculated.')
                 lg.info(' | SUCCESS: Mean heart rate calculated.')
