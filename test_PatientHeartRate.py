@@ -61,18 +61,22 @@ def test_check_interp():
     assert(not np.isnan(t).any())
 
 
-# def test_write_json():
-#    patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
-#    name = os.path.basename(patient1.path)
-#    name = os.path.splitext(name)[0]
-#    json_name = name + '.json'
-#    write_data = {
-#        'ECG Duration': patient1.duration,
-#        'Mean BPM': patient1.mean_hr_bpm,
-#        'Number of Beats': patient1.num_beats,
-#        'Times of Beats': patient1.beat_times.tolist(),
-#        'Voltage Extremes': patient1.voltage_extremes
-#    }
-#    with open(json_name) as json_data:
-#        d = json.load(json_data)
-#    assert cmp(write_data, d) == 0
+ def test_write_json():
+    patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
+    name = os.path.basename(patient1.path)
+    name = os.path.splitext(name)[0]
+    json_name = name + '.json'
+    write_data = {
+        'ECG Duration': patient1.duration,
+        'Mean BPM': patient1.mean_hr_bpm,
+        'Number of Beats': patient1.num_beats,
+        'Times of Beats': patient1.beat_times.tolist(),
+        'Voltage Extremes': patient1.voltage_extremes
+    }
+    with open(json_name) as json_data:
+        d = json.load(json_data)
+    assert(d['ECG Duration'] == patient1.duration)
+    assert(np.allclose(d['Voltage Extremes'], patient1.duration))
+    assert(np.isclose(d['Number of Beats'], patient1.num_beats))
+    assert(np.isclose(d['Mean BPM'], patient1.mean_hr_bpm))
+    assert(np.allclose(d['Times of Beats'], patient1.beat_times))
