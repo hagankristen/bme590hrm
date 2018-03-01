@@ -60,6 +60,7 @@ def test_check_interp():
     assert(not np.isnan(v).any())
     assert(not np.isnan(t).any())
 
+
 def test_write_json():
     patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
     name = os.path.basename(patient1.path)
@@ -68,7 +69,8 @@ def test_write_json():
     with open(json_name) as json_data:
         d = json.load(json_data)
     assert(d['ECG Duration'] == patient1.duration)
-    assert(np.allclose(d['Voltage Extremes'], np.array(patient1.voltage_extremes)))
+    assert(np.allclose(d['Voltage Extremes'],
+                       np.array(patient1.voltage_extremes)))
     assert(np.isclose(d['Number of Beats'], patient1.num_beats))
     assert(np.isclose(d['Mean BPM'], patient1.mean_hr_bpm))
     assert(np.allclose(d['Times of Beats'], patient1.beat_times))

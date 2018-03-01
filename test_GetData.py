@@ -12,11 +12,13 @@ def test_GetData():
     with pytest.raises(OSError):
         GetData('test_data/notreal.csv')
 
+
 def test_verify_csv():
     with pytest.raises(TypeError):
         GetData('test_data/test_data1.json')
     with pytest.raises(OSError):
         GetData('test_data/notreal.csv')
+
 
 def test_get_data():
     with pytest.raises(IOError):
