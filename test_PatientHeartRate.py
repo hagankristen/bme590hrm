@@ -60,8 +60,7 @@ def test_check_interp():
     assert(not np.isnan(v).any())
     assert(not np.isnan(t).any())
 
-
- def test_write_json():
+def test_write_json():
     patient1 = PatientInfo(GetData('test_data/test_data1.csv'))
     name = os.path.basename(patient1.path)
     name = os.path.splitext(name)[0]
