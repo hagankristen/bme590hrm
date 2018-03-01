@@ -33,9 +33,11 @@ class GetData:
         cwd = os.getcwd()
         flag = os.path.exists(csv_file)
         if extension != '.csv':
+            print('TypeError: Input file type is not .csv')
             raise TypeError('TypeError: File not .csv format.')
             lg.debug(' | ABORTED: TypeError: Input file not .csv format.')
         if flag is False:
+            print('OSError: Input file does not exist.')
             raise OSError('OSError: File does not exist.')
             lg.debug(' | ABORTED: OSError: File does not exist.')
         if flag is True and extension == '.csv':
@@ -73,6 +75,7 @@ class GetData:
                 lg.info(' | SUCCESS: ECG Data extracted from input csv file.')
         except IOError:
             lg.debug(' | ABORTED: IOError: Input file empty.')
+            print('IOError: Input file empty.')
         except:
             print('Unknown Error: check data format in input file.')
             lg.debug(' | ABORTED: Unknown error ocurred.')

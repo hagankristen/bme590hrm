@@ -86,19 +86,19 @@ class PatientInfo:
         try:
             if any(i >= 300 for i in self.volt):
                 lg.debug(' | ABORTED: ValueError: ECG voltage exceeds 300 mV')
+                print('ValueError: ECG voltage exceeds 300 mV.')
                 raise ValueError('ValueError: ECG voltage exceeds 300 mV')
             else:
                 lg.info(' | SUCCESS: ECG Data within accepted voltage range.')
         except ValueError:
-            raise ValueError
-            print('Voltage values in input file not in suitable range.')
+            raise ValueError('Voltage values in input file not in suitable range.')
         return
 
     def check_interp(self):
         """Checks ECG data for missing time and voltages values,
             interpolates if needed, saves back to self
 
-        :param patient: instance of PatientInfo
+        :param self: instance of PatientInfo
         """
         import numpy as np
         if np.isnan(self.time).any():
@@ -116,8 +116,8 @@ class PatientInfo:
     def write_json(self):
         """Write .json file containing attributes of ecg data
 
-        :param patient: instance of PatientInfo
-        "raises UnknownError: if writing .json file fails"
+        :param self: instance of PatientInfo
+        :raises UnknownError: if writing .json file fails"
         """
         import json
         import os
