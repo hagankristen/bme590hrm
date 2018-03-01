@@ -1,6 +1,3 @@
-import os
-import numpy as np
-import scipy.signal as sig
 import logging as lg
 
 
@@ -34,6 +31,8 @@ class PatientInfo:
         :raises UnknownError: if peak detection fails
         :raises ValueError: if no beats detected
         """
+        import numpy as np
+        import scipy.signal as sig
         try:
             auto = sig.correlate(self.volt, self.volt,
                                  mode='full', method='auto')
@@ -62,6 +61,7 @@ class PatientInfo:
         :param self: instance of PatientInfo
         :returns voltage_extremes: tuple of min and max voltages
         """
+        import numpy as np
         self.voltage_extremes = (np.nanmin(self.volt), np.nanmax(self.volt))
         lg.info(' | SUCCESS: Voltage extremes calculated.')
         return self.voltage_extremes
@@ -97,6 +97,7 @@ class PatientInfo:
 
         :param patient: instance of PatientInfo
         """
+        import numpy as np
         if np.isnan(self.time).any():
             nans, x = np.isnan(self.time), lambda z: z.nonzero()[0]
             self.time[nans] = np.interp(x(nans), x(~nans), self.time[~nans])
@@ -113,9 +114,11 @@ class PatientInfo:
         """Write .json file containing attributes of ecg data
 
         :param patient: instance of PatientInfo
+        "raises UnknownError: if writing .json file fails"
         """
         import json
         import os
+        import numpy as np
         name = os.path.basename(self.path)
         name = os.path.splitext(name)[0]
         json_name = name + '.json'
