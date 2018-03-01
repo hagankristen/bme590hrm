@@ -71,7 +71,7 @@ def test_calc_beats():
 def test_check_interp():
     intt = PatientInfo(GetData('test_data/test_data30.csv'))
     v = intt.volt
-    t = intt.times
+    t = intt.time
     assert(not np.isnan(v).any())
     assert(not np.isnan(t).any())
 
