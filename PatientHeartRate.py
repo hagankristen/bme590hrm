@@ -90,6 +90,7 @@ class PatientInfo:
             else:
                 lg.info(' | SUCCESS: ECG Data within accepted voltage range.')
         except ValueError:
+            raise ValueError
             print('Voltage values in input file not in suitable range.')
         return
 
