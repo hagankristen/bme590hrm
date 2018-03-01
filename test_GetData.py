@@ -14,10 +14,10 @@ def test_GetData():
 
 def test_verify_csv():
     with pytest.raises(TypeError):
-        GetData.verify_csv('test_data/test_data1.json')
+        GetData('test_data/test_data1.json')
     with pytest.raises(OSError):
-        GetData.verify_csv('test_data/notreal.csv')
+        GetData('test_data/notreal.csv')
 
 def test_get_data():
     with pytest.raises(IOError):
-        GetData.get_data('test_data/empty.csv')
+        GetData('test_data/empty.csv')

@@ -76,6 +76,7 @@ class GetData:
         except IOError:
             lg.debug(' | ABORTED: IOError: Input file empty.')
             print('IOError: Input file empty.')
+            raise IOError
         except:
             print('Unknown Error: check data format in input file.')
             lg.debug(' | ABORTED: Unknown error ocurred.')
