@@ -91,7 +91,8 @@ class PatientInfo:
             else:
                 lg.info(' | SUCCESS: ECG Data within accepted voltage range.')
         except ValueError:
-            raise ValueError('Voltage values in input file not in suitable range.')
+            raise ValueError(
+                'Voltage values in input file not in suitable range.')
         return
 
     def check_interp(self):
